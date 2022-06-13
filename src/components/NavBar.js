@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import LoginButton from "./login";
+import LogoutButton from "./logout";
+
 import {
   Collapse,
   Container,
@@ -113,14 +116,15 @@ const NavBar = () => {
             {!isAuthenticated && (
               <Nav className="d-md-none" navbar>
                 <NavItem>
-                  <Button
+                  {/* <Button
                     id="qsLoginBtn"
                     color="primary"
                     block
                     onClick={() => loginWithRedirect({})}
                   >
                     Log in
-                  </Button>
+                  </Button> */}
+                  <LoginButton />
                 </NavItem>
               </Nav>
             )}
@@ -152,13 +156,14 @@ const NavBar = () => {
                 </NavItem>
                 <NavItem>
                   <FontAwesomeIcon icon="power-off" className="mr-3" />
-                  <RouterNavLink
+                  {/* <RouterNavLink
                     to="#"
                     id="qsLogoutBtn"
                     onClick={() => logoutWithRedirect()}
                   >
                     Log out
-                  </RouterNavLink>
+                  </RouterNavLink> */}
+                  <LogoutButton />
                 </NavItem>
               </Nav>
             )}
