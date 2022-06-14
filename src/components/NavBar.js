@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import LoginButton from "./login";
 import LogoutButton from "./logout";
+import Profile from "../views/Profile";
 
 import {
   Collapse,
@@ -147,12 +148,13 @@ const NavBar = () => {
                 </NavItem>
                 <NavItem>
                   <FontAwesomeIcon icon="user" className="mr-3" />
-                  <RouterNavLink
+                  {/* <RouterNavLink
                     to="/profile"
                     activeClassName="router-link-exact-active"
                   >
                     Profile
-                  </RouterNavLink>
+                  </RouterNavLink> */}
+                  <Profile />
                 </NavItem>
                 <NavItem>
                   <FontAwesomeIcon icon="power-off" className="mr-3" />
