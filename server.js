@@ -1,20 +1,49 @@
 const express = require("express");
-const morgan = require("morgan");
-const helmet = require("helmet");
+const { auth } = require("express-oauth2-jwt-bearer");
 const { join } = require("path");
+const authConfig = require("./auth_config.json");
 
 const app = express();
 
-const port = process.env.SERVER_PORT || 3000;
+// Serve assets from the /public folder
+app.use(express.static(join(__dirname, "public")));
 
-app.use(morgan("dev"));
+// Create the JWT validation middleware
+const checkJwt = auth({
+  audience: authConfig.audience,
+  issuerBaseURL: `https://${authConfig.domain}`
+});
 
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  })
-);
+// Create an endpoint that uses the above middleware to
+// protect this route from unauthorized requests
+app.get("/api/external", checkJwt, (req, res) => {
+  res.send({
+    msg: "Your access token was successfully validated!"
+  });
+});
 
-app.use(express.static(join(__dirname, "build")));
 
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+
+
+
+
+// Serve the auth configuration file
+app.get("/auth_config.json", (req, res) => {
+  res.sendFile(join(__dirname, "auth_config.json"));
+});
+
+// Serve the index page to everything else
+app.get("/*", (req, res) => {
+  res.sendFile(join(__dirname, "index.html"));
+});
+
+// Error handler
+app.use(function(err, req, res, next) {
+  if (err.name === "UnauthorizedError") {
+    return res.status(401).send({ msg: "Invalid token" });
+  }
+
+  next(err, req, res);
+});
+
+module.exports = app;

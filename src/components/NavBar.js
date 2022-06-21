@@ -23,6 +23,7 @@ import {
 } from "reactstrap";
 
 import { useAuth0 } from "@auth0/auth0-react";
+import PlaceOrder from "../views/PlaceOrder";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -55,6 +56,26 @@ const NavBar = () => {
                   activeClassName="router-link-exact-active"
                 >
                   Home
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  tag={RouterNavLink}
+                  to="/PlaceOrder"
+                  exact
+                  activeClassName="router-link-exact-active"
+                >
+                  Place Order
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  tag={RouterNavLink}
+                  to="/MyOrders"
+                  exact
+                  activeClassName="router-link-exact-active"
+                >
+                  My Orders
                 </NavLink>
               </NavItem>
               {isAuthenticated && (
