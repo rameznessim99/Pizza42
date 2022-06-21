@@ -22,6 +22,8 @@ import PlaceOrder from "./views/PlaceOrder";
 import MyOrders from "./views/MyOrders";
 initFontAwesome();
 
+var orderTrial=[]
+
 const App = () => {
   const { isLoading, error } = useAuth0();
 
