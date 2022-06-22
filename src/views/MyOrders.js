@@ -16,7 +16,7 @@ const myOrders = []
 
 export const MyOrders = () => {
   const { apiOrigin = "http://localhost:3001" } = getConfig();
-  
+  const { user } = useAuth0();
   // react functional component state
   const [state, setState] = useState({
     orders: [],
@@ -93,7 +93,7 @@ export const MyOrders = () => {
       //   }
       // }
     }
-    const response = await fetch('https://dev-uz8vcmit.us.auth0.com/api/v2/users/google-oauth2%7C118314779660166923270?fields=user_metadata', options)
+    const response = await fetch('https://dev-uz8vcmit.us.auth0.com/api/v2/users/' + user.sub + '?fields=user_metadata', options)
     const responseData = await response.json();
     console.log(responseData.user_metadata)
 

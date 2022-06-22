@@ -351,7 +351,6 @@ export const PizzaOrder = () => {
             </FormGroup>
             
             {!isEmailVerified && <div><span>Place Order is disabled until email is verified</span><br/></div>}
-            <span>We only take Credit Cards.</span><br/>
             <Button disabled={!isEmailVerified || !state.orderForm.nameValid || state.submitting} onClick={callApi}>Place Order</Button>
             
           </Form>
