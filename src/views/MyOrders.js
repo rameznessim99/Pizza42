@@ -12,6 +12,8 @@ import { getConfig } from "../config";
 import Ordertile from "../components/OrderTile";
 import Loading from "../components/Loading";
 
+const myOrders = []
+
 export const MyOrders = () => {
   const { apiOrigin = "http://localhost:3001" } = getConfig();
   
@@ -94,22 +96,49 @@ export const MyOrders = () => {
     const response = await fetch('https://dev-uz8vcmit.us.auth0.com/api/v2/users/google-oauth2%7C118314779660166923270?fields=user_metadata', options)
     const responseData = await response.json();
     console.log(responseData.user_metadata)
+
+    // myOrders = responseData.user_metadata['orders']
+    // console.log("My orders: " + myOrders)
     
     const a = Array.from(state)
     a.push(responseData.user_metadata)
     // setState(a)
 
-    console.log(a)
+    // console.log(a)
+    // onsole.log(a[0]['orders'])
+
+    
+    myOrders.push(a[0]['orders'])
+    // console.log(myOrders[0])
+
 
      setState({
           ...state,
-          orders: a,
           apiMessage: responseData,
       })
 
-      console.log("Orders: " + JSON.stringify(...state.orders))
+      // console.log("Orders: " + JSON.stringify(...state.orders))
       
       // mountComp()
+
+    var format = ""
+    
+    for(var i=0; i<a[0]['orders'].length; i++) {
+      console.log(a[0]['orders'][i])
+      // console.log(<Ordertile key={1} order={myOrders[0][i]}/>)
+      format += "<div> <h3>Order For: " + a[0]['orders'][i].orderFor + 
+                "</h3> <p><b>Quantity:</b>" + a[0]['orders'][i].quantity + 
+                "</p> <p><b>Crust Type:</b> " + a[0]['orders'][i].crustType +
+                "</p> <p><b>Toppings:</b> ";
+      // console.log(a[0]['orders'][i]['toppings'])
+      for(var j=0; j<a[0]['orders'][i]['toppings'].length; j++) {
+        format += "" + a[0]['orders'][i]['toppings'][j] + ". ";
+      }     
+      format += "</div><hr>";
+
+    }
+    console.log(format)
+    document.getElementById("ordersDisplay").innerHTML = format;
     
    
     } catch (error) {
@@ -130,21 +159,38 @@ export const MyOrders = () => {
     // eslint-disable-next-line 
   }, []);
 
-  return (
+  // function displayOrder() {
+  //   var format = ""
+  //   for(var i=0; i<=myOrders.length; i++) {
+  //     console.log(myOrders[0][i])
+  //     // console.log(<Ordertile key={1} order={myOrders[0][i]}/>)
+  //     format += "<h1>HERE</h1>";
+  //   }
+  //   //console.log(format)
+  //   document.getElementById("ordersDisplay").innerHTML = format;
+  // }
+
+  return ( 
     <Fragment>
       {
         state.loading && (
           <Loading/>
         )
       }
-      <Button onClick={callApi}>View Order History</Button>
+
+      {/* {
+        myOrders !== undefined && (
+          <Button onClick={callApi}>View Order History</Button>
+        )
+      } */}
+
       {
         
         // !state.loading && state.orders !== undefined && state.orders.length!== 0 && 
           // (
-            <div>
-              console.log(JSON.stringify(...state.orders))
-              {/* {state.orders.map((order) => {
+            <div id="ordersDisplay">
+              
+              {/* {myOrders[0].map((order) => {
                 return <Ordertile key={1} order={order}/>
               })} */}
             </div>
@@ -152,7 +198,7 @@ export const MyOrders = () => {
         
       }
       {
-         !state.loading && state.orders.length === 0 && (
+         !state.loading && myOrders === undefined && (
           <Container className="mb-5">
           <Row className="align-items-center profile-header mb-5 text-center text-md-center">
             <Col xs="12">
@@ -176,7 +222,6 @@ export const MyOrders = () => {
         </Container>
          )
       }
-      // <Button onClick={callApi}>Place Order</Button>
     </Fragment>
   );
 };
